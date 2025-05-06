@@ -43,7 +43,7 @@ function provision() {
   by_action=$(command jq --compact-output --slurp '.[] | group_by(.action) | map({key: .[0].action, value: .}) | from_entries' <<<"${EVAL}")
 
   for action in $(command jq --compact-output --raw-output '.|keys[]' <<<"$by_action"); do
-    readarray -t actions < <(command jq --compact-output --raw-output ".${action}[] | @base64" <<<"${by_action}")
+    readarray -t actions < <(command jq --compact-output --raw-output ".\"${action}\"[] | @base64" <<<"${by_action}")
     echo "Check proviso for ${#actions[@]} '$action' action(s) ..."
     # this trick doesn't require proviso to be executable, as created by builtins.toFile
     function _proviso() {
